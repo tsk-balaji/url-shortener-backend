@@ -104,16 +104,15 @@ exports.activateAccount = async (req, res) => {
 // Forgot Password
 exports.forgotPassword = async (req, res) => {
   try {
-    const { email } = req.body;
-    console.log("Email from request body:", email); // Log the email
+    console.log("Request body:", req.body); // Log the entire request body
+    const { username } = req.body; // Change this to username
+    console.log("Extracted username:", username); // Log the extracted username
 
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+    if (!username) {
+      return res.status(400).json({ message: "Email (username) is required" });
     }
 
-    const user = await User.findOne({ username: email });
-    console.log("User found in database:", user); // Log the user found
-
+    const user = await User.findOne({ username }); // Use username here
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -128,7 +127,7 @@ exports.forgotPassword = async (req, res) => {
     // Send reset password email
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: email,
+      to: username, // Use username here as it contains the email
       subject: "Password Reset Request",
       html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
     });

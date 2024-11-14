@@ -17,6 +17,15 @@ exports.createShortUrl = async (req, res) => {
 
     const userId = req.user.id; // Assuming user is authenticated and user ID is available
 
+    // Check if URL already exists for this user
+    const existingUrl = await Url.findOne({ originalUrl, userId });
+    if (existingUrl) {
+      return res.status(200).json({
+        shortUrl: `${process.env.BASE_URL}/${existingUrl.shortUrl}`,
+        originalUrl: existingUrl.originalUrl, // Add originalUrl to response
+      });
+    }
+
     // Generate a unique short URL
     const shortUrl = shortid.generate();
 
@@ -24,14 +33,21 @@ exports.createShortUrl = async (req, res) => {
     const newUrl = new Url({
       originalUrl,
       shortUrl,
-      userId, // Associate the shortened URL with the authenticated user
+      userId,
+      clicks: 0, // Initialize clicks counter
     });
 
-    await newUrl.save();
+    const savedUrl = await newUrl.save();
+
+    // Verify URL was saved successfully
+    if (!savedUrl) {
+      return res.status(500).json({ message: "Failed to save URL" });
+    }
 
     // Respond with the shortened URL
     res.status(201).json({
-      shortUrl: `${process.env.BASE_URL}/${shortUrl}`, // Adjust if needed
+      shortUrl: `${process.env.BASE_URL}/${shortUrl}`,
+      originalUrl: savedUrl.originalUrl, // Add originalUrl to response
     });
   } catch (error) {
     console.error(error); // For debugging purposes
