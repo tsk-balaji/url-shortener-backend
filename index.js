@@ -3,12 +3,16 @@ const initialise_Mongo_Connectivity = require("./database/connection.mongodb");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 // Connect to MongoDB
 initialise_Mongo_Connectivity();
 
 const app = express();
-app.use(express.json());
+
+//To Parse Json Request
+app.use(bodyParser.json());
+
 app.use(cors());
 
 // Routes
