@@ -37,27 +37,27 @@ exports.registerUser = async (req, res) => {
     const activationLink = `${process.env.BASE_URL}/api/auth/activate/${activationToken}`;
 
     // Send activation email
-    // Activation Email Template
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: username,
       subject: "Activate Your Account",
       html: `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
-      <h2 style="text-align: center; color: #4CAF50;">Welcome to Our URL Shortener Service</h2>
-      <p style="font-size: 16px; color: #333;">
-        Hello ${firstName || "User"},<br><br>
-        Thank you for registering! Please activate your account by clicking the button below:
+      <h2 style="color: #333;">Welcome to Our Service!</h2>
+      <p style="color: #555;">
+        Hi ${firstName},<br><br>
+        Thank you for registering with us. Please confirm your email to activate your account and start using our service.
       </p>
       <div style="text-align: center; margin: 20px 0;">
-        <a href="${activationLink}" style="text-decoration: none; padding: 12px 20px; background-color: #4CAF50; color: #fff; border-radius: 4px; font-size: 16px;">
+        <a href="${activationLink}" style="background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
           Activate Account
         </a>
       </div>
-      <p style="font-size: 14px; color: #777;">
-        If you did not request this, please ignore this email.
+      <p style="color: #555;">
+        If you didn’t request this email, please ignore it.<br><br>
+        Thank you,<br>
+        The Team
       </p>
-      <p style="font-size: 14px; color: #777; text-align: center;">&copy; ${new Date().getFullYear()} URL Shortener</p>
     </div>
   `,
     });
@@ -143,27 +143,29 @@ exports.forgotPassword = async (req, res) => {
     const resetLink = `${process.env.BASE_URL}/api/auth/reset-password/${resetToken}`;
 
     // Send reset password email
-    // Activation Email Template
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: username,
-      subject: "Activate Your Account",
+      subject: "Password Reset Request",
       html: `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
-      <h2 style="text-align: center; color: #4CAF50;">Welcome to Our URL Shortener Service</h2>
-      <p style="font-size: 16px; color: #333;">
-        Hello ${firstName || "User"},<br><br>
-        Thank you for registering! Please activate your account by clicking the button below:
+      <h2 style="color: #333;">Password Reset Request</h2>
+      <p style="color: #555;">
+        Hi ${firstName},<br><br>
+        We received a request to reset your password. Click the button below to set a new password.
       </p>
       <div style="text-align: center; margin: 20px 0;">
-        <a href="${activationLink}" style="text-decoration: none; padding: 12px 20px; background-color: #4CAF50; color: #fff; border-radius: 4px; font-size: 16px;">
-          Activate Account
+        <a href="${resetLink}" style="background-color: #FF5722; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
+          Reset Password
         </a>
       </div>
-      <p style="font-size: 14px; color: #777;">
-        If you did not request this, please ignore this email.
+      <p style="color: #555;">
+        This link will expire in 1 hour. If you didn’t request a password reset, you can ignore this email.
       </p>
-      <p style="font-size: 14px; color: #777; text-align: center;">&copy; ${new Date().getFullYear()} URL Shortener</p>
+      <p style="color: #555;">
+        Thank you,<br>
+        The Team
+      </p>
     </div>
   `,
     });
