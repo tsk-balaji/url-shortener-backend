@@ -34,7 +34,7 @@ exports.registerUser = async (req, res) => {
 
     // Generate activation token
     const activationToken = generateToken(newUser._id);
-    const activationLink = `${process.env.BASE_URL}/api/auth/activate/${activationToken}`;
+    const activationLink = `http://localhost:5173/api/auth/activate/${activationToken}`;
 
     // Send activation email
     await transporter.sendMail({
