@@ -45,7 +45,7 @@ exports.registerUser = async (req, res) => {
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
       <h2 style="color: #333;">Welcome to Our Service!</h2>
       <p style="color: #555;">
-        Hi ${firstName},<br><br>
+        Hi ${user.firstName},<br><br>
         Thank you for registering with us. Please confirm your email to activate your account and start using our service.
       </p>
       <div style="text-align: center; margin: 20px 0;">
@@ -151,7 +151,7 @@ exports.forgotPassword = async (req, res) => {
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
       <h2 style="color: #333;">Password Reset Request</h2>
       <p style="color: #555;">
-        Hi ${firstName},<br><br>
+        Hi ${user.firstName},<br><br>
         We received a request to reset your password. Click the button below to set a new password.
       </p>
       <div style="text-align: center; margin: 20px 0;">
