@@ -104,8 +104,9 @@ exports.activateAccount = async (req, res) => {
 // Forgot Password
 exports.forgotPassword = async (req, res) => {
   try {
-    const { email } = req.body;
-    const user = await User.findOne({ useremail: email });
+    const { useremail } = req.body;
+    const user = await User.findOne({ useremail });
+
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
