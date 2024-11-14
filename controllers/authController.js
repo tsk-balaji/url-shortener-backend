@@ -105,7 +105,15 @@ exports.activateAccount = async (req, res) => {
 exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
+    console.log("Email from request body:", email); // Log the email
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
     const user = await User.findOne({ username: email });
+    console.log("User found in database:", user); // Log the user found
+
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
