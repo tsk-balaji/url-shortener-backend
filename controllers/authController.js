@@ -37,11 +37,29 @@ exports.registerUser = async (req, res) => {
     const activationLink = `${process.env.BASE_URL}/api/auth/activate/${activationToken}`;
 
     // Send activation email
+    // Activation Email Template
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: username,
       subject: "Activate Your Account",
-      html: `<p>Click <a href="${activationLink}">here</a> to activate your account.</p>`,
+      html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+      <h2 style="text-align: center; color: #4CAF50;">Welcome to Our URL Shortener Service</h2>
+      <p style="font-size: 16px; color: #333;">
+        Hello ${firstName || "User"},<br><br>
+        Thank you for registering! Please activate your account by clicking the button below:
+      </p>
+      <div style="text-align: center; margin: 20px 0;">
+        <a href="${activationLink}" style="text-decoration: none; padding: 12px 20px; background-color: #4CAF50; color: #fff; border-radius: 4px; font-size: 16px;">
+          Activate Account
+        </a>
+      </div>
+      <p style="font-size: 14px; color: #777;">
+        If you did not request this, please ignore this email.
+      </p>
+      <p style="font-size: 14px; color: #777; text-align: center;">&copy; ${new Date().getFullYear()} URL Shortener</p>
+    </div>
+  `,
     });
 
     res.status(201).json({
@@ -125,11 +143,29 @@ exports.forgotPassword = async (req, res) => {
     const resetLink = `${process.env.BASE_URL}/api/auth/reset-password/${resetToken}`;
 
     // Send reset password email
+    // Activation Email Template
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: username, // Use username here as it contains the email
-      subject: "Password Reset Request",
-      html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+      to: username,
+      subject: "Activate Your Account",
+      html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+      <h2 style="text-align: center; color: #4CAF50;">Welcome to Our URL Shortener Service</h2>
+      <p style="font-size: 16px; color: #333;">
+        Hello ${firstName || "User"},<br><br>
+        Thank you for registering! Please activate your account by clicking the button below:
+      </p>
+      <div style="text-align: center; margin: 20px 0;">
+        <a href="${activationLink}" style="text-decoration: none; padding: 12px 20px; background-color: #4CAF50; color: #fff; border-radius: 4px; font-size: 16px;">
+          Activate Account
+        </a>
+      </div>
+      <p style="font-size: 14px; color: #777;">
+        If you did not request this, please ignore this email.
+      </p>
+      <p style="font-size: 14px; color: #777; text-align: center;">&copy; ${new Date().getFullYear()} URL Shortener</p>
+    </div>
+  `,
     });
 
     res.status(200).json({ message: "Password reset link sent to your email" });
