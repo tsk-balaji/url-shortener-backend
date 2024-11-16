@@ -140,7 +140,7 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpire = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    const resetLink = `${process.env.BASE_URL}/api/auth/reset-password/${resetToken}`;
+    const resetLink = `http://localhost:5173/api/auth/reset-password/${resetToken}`;
 
     // Send reset password email
     await transporter.sendMail({
