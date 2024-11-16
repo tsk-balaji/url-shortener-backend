@@ -34,7 +34,7 @@ exports.registerUser = async (req, res) => {
 
     // Generate activation token
     const activationToken = generateToken(newUser._id);
-    const activationLink = `http://localhost:5173/api/auth/activate/${activationToken}`;
+    const activationLink = `https://url-shortener-tsk.netlify.app/api/auth/activate/${activationToken}`;
 
     // Send activation email
     await transporter.sendMail({
@@ -140,7 +140,7 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpire = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
+    const resetLink = `https://url-shortener-tsk.netlify.app/reset-password/${resetToken}`;
 
     // Send reset password email
     await transporter.sendMail({
