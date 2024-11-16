@@ -17,11 +17,20 @@ const transporter = nodemailer.createTransport({
 const generateToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-// Register User
 exports.registerUser = async (req, res) => {
   try {
-    const { username, firstName, lastName, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const { username, firstName, lastName, password } = req.body; // Extract individual fields
+
+    // Check if a user with the given email (username) already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(409).json({
+        message: "Email already registered",
+        existingUser: username, // Include existing user's email
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
     const newUser = new User({
       username,
       firstName,
@@ -42,24 +51,24 @@ exports.registerUser = async (req, res) => {
       to: username,
       subject: "Activate Your Account",
       html: `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
-      <h2 style="color: #333;">Welcome to Our Service!</h2>
-      <p style="color: #555;">
-        Hi ${user.firstName},<br><br>
-        Thank you for registering with us. Please confirm your email to activate your account and start using our service.
-      </p>
-      <div style="text-align: center; margin: 20px 0;">
-        <a href="${activationLink}" style="background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
-          Activate Account
-        </a>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+        <h2 style="color: #333;">Welcome to Our Service!</h2>
+        <p style="color: #555;">
+          Hi ${firstName},<br><br>
+          Thank you for registering with us. Please confirm your email to activate your account and start using our service.
+        </p>
+        <div style="text-align: center; margin: 20px 0;">
+          <a href="${activationLink}" style="background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
+            Activate Account
+          </a>
+        </div>
+        <p style="color: #555;">
+          If you didn’t request this email, please ignore it.<br><br>
+          Thank you,<br>
+          The Team
+        </p>
       </div>
-      <p style="color: #555;">
-        If you didn’t request this email, please ignore it.<br><br>
-        Thank you,<br>
-        The Team
-      </p>
-    </div>
-  `,
+    `,
     });
 
     res.status(201).json({
@@ -67,9 +76,11 @@ exports.registerUser = async (req, res) => {
         "User registered. Please check your email to activate your account.",
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Login User
 exports.loginUser = async (req, res) => {
