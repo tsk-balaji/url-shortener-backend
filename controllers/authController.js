@@ -17,33 +17,29 @@ const transporter = nodemailer.createTransport({
 const generateToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-//Register User 
+//Register User
 exports.registerUser = async (req, res) => {
   try {
-    const { username, firstName, lastName, password } = req.body; // Extract individual fields
+    console.log("Request Body:", req.body); // Debug log to check the incoming data
 
-    // Debugging log to see the incoming username
-    console.log('Incoming username:', username);
+    const { username, firstName, lastName, password } = req.body;
 
-    // Ensure username is provided and not just empty or null
-    if (!username || !username.trim()) {
-      return res.status(400).json({ message: "Email is required" });
+    // Check if username is provided
+    if (!username || !firstName || !lastName || !password) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Check if a user with the given email (username) already exists
+    // Check if a user with the given username already exists
     const existingUser = await User.findOne({ username });
-
-    // Debugging log to check the found user (if any)
-    console.log('Found existing user:', existingUser);
-
     if (existingUser) {
       return res.status(409).json({
-        message: "Email already registered",
-        existingUser: username, // Include existing user's email
+        message: "Username already registered",
+        existingUser: username, // Include existing user's username
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+    // Hash the password and create a new user
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       username,
       firstName,
@@ -83,7 +79,6 @@ exports.registerUser = async (req, res) => {
       </div>
     `,
     });
-
     res.status(201).json({
       message:
         "User registered. Please check your email to activate your account.",
@@ -93,7 +88,6 @@ exports.registerUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 // Login User
 exports.loginUser = async (req, res) => {
