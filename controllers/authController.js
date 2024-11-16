@@ -22,8 +22,20 @@ exports.registerUser = async (req, res) => {
   try {
     const { username, firstName, lastName, password } = req.body; // Extract individual fields
 
+    // Debugging log to see the incoming username
+    console.log('Incoming username:', username);
+
+    // Ensure username is provided and not just empty or null
+    if (!username || !username.trim()) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
     // Check if a user with the given email (username) already exists
     const existingUser = await User.findOne({ username });
+
+    // Debugging log to check the found user (if any)
+    console.log('Found existing user:', existingUser);
+
     if (existingUser) {
       return res.status(409).json({
         message: "Email already registered",
@@ -41,7 +53,6 @@ exports.registerUser = async (req, res) => {
     });
 
     await newUser.save();
-
 
     // Generate activation token
     const activationToken = generateToken(newUser._id);
@@ -82,7 +93,6 @@ exports.registerUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 
 // Login User
