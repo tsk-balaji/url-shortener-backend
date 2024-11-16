@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
-const urlSchema = new mongoose.Schema(
+const UrlSchema = new mongoose.Schema(
   {
     originalUrl: { type: String, required: true },
-    shortUrl: { type: String, required: true, unique: true },
+    shortUrl: { type: String, required: true },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -11,7 +11,7 @@ const urlSchema = new mongoose.Schema(
     },
     clicks: { type: Number, default: 0 },
   },
-  { timestamps: true }
+  { timestamps: true } // Automatically adds createdAt and updatedAt fields
 );
 
-module.exports = mongoose.model("Url", urlSchema);
+module.exports = mongoose.model("Url", UrlSchema);

@@ -78,13 +78,31 @@ exports.redirectUrl = async (req, res) => {
 // Get URL Stats
 exports.getUrlStats = async (req, res) => {
   try {
-    const userId = req.user.id; // Assume req.user is set after JWT authentication
+    // Get daily stats
+    const dailyStats = await Url.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, // Group by day
+          totalUrls: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: -1 } }, // Sort by day in descending order
+    ]);
 
-    const urls = await Url.find({ userId }).select(
-      "originalUrl shortUrl clicks createdAt"
-    );
-    res.status(200).json(urls);
+    // Get monthly stats
+    const monthlyStats = await Url.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } }, // Group by month
+          totalUrls: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: -1 } }, // Sort by month in descending order
+    ]);
+
+    res.status(200).json({ dailyStats, monthlyStats });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch URL statistics" });
   }
 };
