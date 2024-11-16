@@ -42,8 +42,6 @@ exports.registerUser = async (req, res) => {
 
     await newUser.save();
 
-    // Cleanup: Delete any documents with useremail: null
-    await User.deleteMany({ useremail: null });
 
     // Generate activation token
     const activationToken = generateToken(newUser._id);
