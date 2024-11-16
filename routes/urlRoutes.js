@@ -8,7 +8,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
 
 router.post("/create", authMiddleware, createShortUrl);
-router.get("/:shortUrl", redirectUrl);
 router.get("/stats", getUrlStats);
+router.get("/:shortUrl", redirectUrl);
 
 module.exports = router;
