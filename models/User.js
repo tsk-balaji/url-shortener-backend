@@ -1,3 +1,6 @@
+
+const mongoose = require("mongoose");
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -9,3 +12,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   isActive: { type: Boolean, default: false }
 });
+
+
+
+// Specify the custom collection name as the third argument
+module.exports = mongoose.model("User", userSchema, "users_collection");
