@@ -1,19 +1,15 @@
-
 const mongoose = require("mongoose");
-
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true // Ensure it's unique and properly indexed
+const userSchema = new mongoose.Schema(
+  {
+    username: { type: String, required: true, unique: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    password: { type: String, required: true },
+    isActive: { type: Boolean, default: false },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
-  firstName: { type: String },
-  lastName: { type: String },
-  password: { type: String },
-  isActive: { type: Boolean, default: false }
-});
-
-
-
+  { timestamps: true }
+);
 // Specify the custom collection name as the third argument
-module.exports = mongoose.model("User", userSchema, "users_collection");
+module.exports = mongoose.model("User", userSchema);
