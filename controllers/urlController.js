@@ -78,23 +78,23 @@ exports.redirectUrl = async (req, res) => {
 // Get URL Stats
 exports.getUrlStats = async (req, res) => {
   try {
-    // Get daily stats
+    // Get daily stats for all users
     const dailyStats = await Url.aggregate([
       {
         $group: {
           _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, // Group by day
-          totalUrls: { $sum: 1 },
+          totalUrls: { $sum: 1 }, // Count the total URLs created on that day
         },
       },
       { $sort: { _id: -1 } }, // Sort by day in descending order
     ]);
 
-    // Get monthly stats
+    // Get monthly stats for all users
     const monthlyStats = await Url.aggregate([
       {
         $group: {
           _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } }, // Group by month
-          totalUrls: { $sum: 1 },
+          totalUrls: { $sum: 1 }, // Count the total URLs created in that month
         },
       },
       { $sort: { _id: -1 } }, // Sort by month in descending order
