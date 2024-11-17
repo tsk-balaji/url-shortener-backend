@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
+  useremail: { type: String },
   username: {
     type: String,
     required: true,
-    unique: true, // Ensure `username` is unique
     lowercase: true,
   },
   firstName: {
