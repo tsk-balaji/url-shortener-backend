@@ -41,9 +41,10 @@ exports.registerUser = async (req, res) => {
     // Hash the password and create a new user
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
-      username,
-      firstName,
-      lastName,
+      username: username,
+      useremail: username,
+      firstName: firstName,
+      lastName: lastName,
       password: hashedPassword,
       isActive: false, // User needs to activate account via email
     });
