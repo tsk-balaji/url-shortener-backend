@@ -53,7 +53,8 @@ exports.registerUser = async (req, res) => {
 
     // Generate activation token
     const activationToken = generateToken(newUser._id);
-    const activationLink = `https://url-shortener-tsk.netlify.com/activate-account/${activationToken}`;
+    const activationLink = `https://url-shortener-tsk.netlify.app/activate-account/${activationToken}`;
+    
 
     // Send activation email
     await transporter.sendMail({
